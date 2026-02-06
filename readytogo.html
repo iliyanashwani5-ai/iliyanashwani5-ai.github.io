@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ready to Go – Prototype</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Orbitron', sans-serif;
+        background: radial-gradient(circle at top, #0ff2, #000);
+        color: #fff;
+        text-align: center;
+    }
+
+    h1 {
+        color: #00ffe7;
+        text-shadow: 0 0 12px #00ffe7;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    .mode-toggle button {
+        padding: 10px 20px;
+        margin: 10px;
+        font-size: 16px;
+        background: #111;
+        border: 2px solid #00ffe7;
+        color: #00ffe7;
+        cursor: pointer;
+    }
+
+    .mode-toggle button.active {
+        background: #00ffe7;
+        color: #000;
+    }
+
+    .vehicle {
+        margin: 30px auto;
+        width: 300px;
+        height: 120px;
+        border: 3px solid #ff00ff;
+        position: relative;
+        transform-origin: center;
+        transition: transform 0.4s;
+        box-shadow: 0 0 20px #ff00ff;
+    }
+
+    .part {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        background: #ffaa00;
+        box-shadow: 0 0 10px #ffaa00;
+    }
+
+    .meter {
+        width: 100%;
+        height: 25px;
+        border: 2px solid #fff;
+        margin: 20px 0;
+        position: relative;
+    }
+
+    .meter-fill {
+        height: 100%;
+        width: 100%;
+        background: linear-gradient(to right, #0f0, #ff0, #f00);
+        transition: width 0.3s;
+    }
+
+    .controls button {
+        padding: 10px 15px;
+        margin: 8px;
+        font-size: 14px;
+        background: #222;
+        border: 1px solid #0ff;
+        color: #0ff;
+        cursor: pointer;
+    }
+
+    .status {
+        margin-top: 20px;
+        font-size: 18px;
+    }
+</style>
+</head>
+
+<body>
+<div class="container">
+    <h1>READY TO GO</h1>
+    <p>Neon-Junkyard Punk Survival Prototype</p>
+
+    <!-- MODE SELECT -->
+    <div class="mode-toggle">
+        <button id="casual" class="active">Casual</button>
+        <button id="ranked">Ranked</button>
+    </div>
+
+    <!-- READINESS METER -->
+    <div class="meter">
+        <div id="meterFill" class="meter-fill"></div>
+    </div>
+    <p>Readiness Meter</p>
+
+    <!-- VEHICLE -->
+    <div id="vehicle" class="vehicle">
+        <div class="part" style="left:20px; top:40px;"></div>
+        <div class="part" style="right:20px; top:40px;"></div>
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="controls">
+        <button onclick="addWeight()">Add Heavy Part</button>
+        <button onclick="rebalance()">Rebalance</button>
+        <button onclick="sabotage()">Saboteur Action</button>
+        <button onclick="startVoyage()">Start Voyage</button>
+    </div>
+
+    <div class="status" id="statusText">Status: Stable</div>
+</div>
+
+<script>
+    let readiness = 100;
+    let tilt = 0;
+    let mode = "casual";
+
+    const meterFill = document.getElementById("meterFill");
+    const vehicle = document.getElementById("vehicle");
+    const statusText = document.getElementById("statusText");
+
+    document.getElementById("casual").onclick = () => setMode("casual");
+    document.getElementById("ranked").onclick = () => setMode("ranked");
+
+    function setMode(m) {
+        mode = m;
+        document.getElementById("casual").classList.remove("active");
+        document.getElementById("ranked").classList.remove("active");
+        document.getElementById(m).classList.add("active");
+        reset();
+    }
+
+    function reset() {
+        readiness = 100;
+        tilt = 0;
+        updateUI();
+        statusText.innerText = "Status: Stable";
+    }
+
+    function addWeight() {
+        tilt += mode === "casual" ? 15 : 8;
+        readiness -= 10;
+        updateUI();
+    }
+
+    function sabotage() {
+        tilt += mode === "casual" ? 25 : 12;
+        readiness -= 20;
+        statusText.innerText = "⚠ Sabotage suspected!";
+        updateUI();
+    }
+
+    function rebalance() {
+        tilt *= 0.5;
+        readiness += 5;
+        updateUI();
+    }
+
+    function startVoyage() {
+        if (readiness <= 0 || Math.abs(tilt) > 45) {
+            statusText.innerText = "💥 VEHICLE DESTROYED — SABOTEUR WINS";
+        } else {
+            statusText.innerText = "🚀 EXTRACTION SUCCESS — CREW WINS";
+        }
+    }
+
+    function updateUI() {
+        readiness = Math.max(0, Math.min(100, readiness));
+        meterFill.style.width = readiness + "%";
+        vehicle.style.transform = `rotate(${tilt}deg)`;
+
+        if (readiness < 30 || Math.abs(tilt) > 30) {
+            statusText.innerText = "❗ Critical Instability";
+        }
+    }
+</script>
+</body>
+</html>
