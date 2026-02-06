@@ -13,10 +13,11 @@
         text-align: center;
     }
 
-    h1 {
-        color: #00ffe7;
-        text-shadow: 0 0 12px #00ffe7;
-    }
+    h1h1 {
+    color: #000;
+    text-shadow: none;
+}
+
 
     .container {
         max-width: 900px;
@@ -40,15 +41,16 @@
     }
 
     .vehicle {
-        margin: 30px auto;
-        width: 300px;
-        height: 120px;
-        border: 3px solid #ff00ff;
-        position: relative;
-        transform-origin: center;
-        transition: transform 0.4s;
-        box-shadow: 0 0 20px #ff00ff;
-    }
+    margin: 30px auto;
+    width: 300px;
+    height: 120px;
+    border: 3px solid #000;
+    position: relative;
+    transform-origin: center;
+    transition: transform 0.4s;
+    box-shadow: none;
+}
+
 
     .part {
         position: absolute;
@@ -160,7 +162,7 @@
     function sabotage() {
         tilt += mode === "casual" ? 25 : 12;
         readiness -= 20;
-        statusText.innerText = "⚠ Sabotage suspected!";
+        statusText.innerText = "😀 Sabotage suspected!";
         updateUI();
     }
 
@@ -172,9 +174,9 @@
 
     function startVoyage() {
         if (readiness <= 0 || Math.abs(tilt) > 45) {
-            statusText.innerText = "💥 VEHICLE DESTROYED — SABOTEUR WINS";
+            statusText.innerText = "🤯VEHICLE DESTROYED — SABOTEUR WINS";
         } else {
-            statusText.innerText = "🚀 EXTRACTION SUCCESS — CREW WINS";
+            statusText.innerText = "😱EXTRACTION SUCCESS — CREW WINS";
         }
     }
 
@@ -184,7 +186,7 @@
         vehicle.style.transform = `rotate(${tilt}deg)`;
 
         if (readiness < 30 || Math.abs(tilt) > 30) {
-            statusText.innerText = "❗ Critical Instability";
+            statusText.innerText = "Critical Instability";
         }
     }
 </script>
